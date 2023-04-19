@@ -27,6 +27,7 @@ class csp:
 		
 		self.neighbors = dict((s, set(sum(self.units[s],[]))-set([s])) for s in squares)
 		self.constraints = constraints 
+		self.assignments = []
 		# self.constraints = {(variable, peer) for variable in self.variables for peer in self.neighbors[variable]}
 
 	
@@ -106,6 +107,7 @@ def Backtracking_Search(csp):
 
 #THE RECURSIVE FUNCTION WHICH ASSIGNS VALUE USING BACKTRACKING 
 def Backtrack(assignment, csp):
+	csp.assignments.append(assignment)
 	if set(assignment.keys())==set(squares):
 		return assignment
 
@@ -117,10 +119,9 @@ def Backtrack(assignment, csp):
 			assignment[var] = value
 			inferences = {}
 			inferences = Inference(assignment, inferences, csp, var, value)
-			if inferences!= "FAILURE":
-				result = Backtrack(assignment, csp)
-				if result!="FAILURE":
-					return result
+			result = Backtrack(assignment, csp)
+			if result!="FAILURE":
+				return result
 			del assignment[var]
 			csp.values.update(domain)
 			
@@ -156,8 +157,8 @@ def Inference(assignment, inferences, csp, var, value):
 
 
 
-sudoku = csp(grid='100203800082060100700001640300095020070000010090310006053600001007020390004109005')
+sudoku = csp(grid='700400086051080400040307090309006100000020000004900708080102060006050910210003005')
 
 solved  = Backtracking_Search(sudoku) 
 
-print(sudoku.values)
+print(len(sudoku.assignments))
