@@ -57,9 +57,12 @@ def Revise(csp, Xi, Xj):
 
 def isconsistent(csp, x, Xi, Xj):
 	for y in csp.values[Xj]:
-		if Xj in csp.neighbors[Xi] and y!=x:
-			return True
-
+		if csp.constraints.get((Xi, Xj)) is not None:
+			if Xj in csp.neighbors[Xi] and ([int(x),int(y)] in csp.constraints.get((Xi, Xj))):
+				return True
+		elif csp.constraints.get((Xj, Xi)) is not None:
+			if Xj in csp.neighbors[Xi] and ([int(x),int(y)] in csp.constraints.get((Xj, Xi))):
+				return True
 	return False
 
 #--------------------------------------------------------------------------------------------------------------------------------------
@@ -83,18 +86,6 @@ def AC3(csp):
 				q.put((Xk, Xi))
 
 	return True 
-
-def isComplete(csp):
-	for variable in squares:
-		if len(csp.values[variable])>1:
-			return False
-	return True
-
-def write(values):
-	output = ""
-	for variable in squares:
-		output = output + values[variable]
-	return output
 
 #--------------------------------------------------------------------------------------------------------------------------------------
 #Part 4
@@ -130,7 +121,6 @@ def Backtrack(assignment, csp):
 				result = Backtrack(assignment, csp)
 				if result!="FAILURE":
 					return result
-
 			del assignment[var]
 			csp.values.update(domain)
 			
@@ -166,7 +156,7 @@ def Inference(assignment, inferences, csp, var, value):
 
 
 
-sudoku = csp(grid='700400086051080400040307090309006100000020000004900708080102060006050910210003005')
+sudoku = csp(grid='100203800082060100700001640300095020070000010090310006053600001007020390004109005')
 
 solved  = Backtracking_Search(sudoku) 
 

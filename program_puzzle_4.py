@@ -189,7 +189,7 @@ def Revise(csp, Xi, Xj):
 
 def isconsistent(csp, x, Xi, Xj):
 	for y in csp.values[Xj]:
-		if Xj in csp.neighbors[Xi] and y!=x:
+		if Xj in csp.neighbors[Xi] and ([x,y] in csp.constraints.get((Xi, Xj))):
 			return True
 
 	return False
@@ -296,10 +296,8 @@ def Inference(assignment, inferences, csp, var, value):
 
 	return inferences
 
-
-
 sudoku = csp(grid='1000020000300004')
 
-solved  = AC3(sudoku) 
+solved  = Backtracking_Search(sudoku) 
 
 print(sudoku.values)
