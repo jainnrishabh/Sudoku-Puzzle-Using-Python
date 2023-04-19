@@ -161,4 +161,4 @@ sudoku = csp(grid='7004000860510804000403070903090061000000200000049007080801020
 
 solved  = Backtracking_Search(sudoku) 
 
-print(len(sudoku.assignments))
+print(sudoku.assignments)
